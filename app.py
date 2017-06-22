@@ -18,6 +18,7 @@ from flask import make_response
 from flask import jsonify
 
 from intents import appointments
+from intents import login
 
 # Flask app should start in global layout
 app = Flask(__name__)
@@ -49,7 +50,7 @@ def processRequest(req):
     res = {} # handles non matching case
 
     if req.get("result").get("action") == "login":
-        res = doK1Login(req)
+        res = login.login(req)
     if req.get("result").get("action") == "yahooWeatherForecast":
         res = doYahooWeatherForecast(req)
     if req.get("result").get("action") == "test":
@@ -59,28 +60,6 @@ def processRequest(req):
         res = appointments.first_visit(base_url, token)
 
     return res
-
-
-def doK1Login(req):
-    baseurl = "https://staging.kitomba.com/"
-    url = baseurl + "k1/auth/login"
-    result = req.get("result")
-    parameters = result.get("parameters")
-    email = parameters.get("email")
-    password = parameters.get("password")
-    data = urlencode({'login': email, 'password': password})
-    print("url " + url)
-    print("data " + data)
-    response = urlopen(url=url, data=data.encode('ascii')).read()
-    response_data = json.loads(response)
-    print("here")
-    print("response :" + str(response_data))
-
-    return {
-        "speech": "you are logged in",
-        "displayText": "you are logged in",
-        "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": response_data.get('token')}}]
-    }
 
 
 def doYahooWeatherForecast(req):
