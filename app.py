@@ -21,7 +21,6 @@ from flask import make_response
 
 from intents import appointments
 from intents import login
-from intents import sales
 
 # Flask app should start in global layout
 app = Flask(__name__)
@@ -44,14 +43,26 @@ def webhook():
     return r
 
 
+def get_token(req):
+    contexts = req.get("result").get("contexts")
+    for c in contexts:
+        if c['name'] == "token":
+            return c.get("parameters").get("token")
+
+def get_business_token(req):
+    contexts = req.get("result").get("contexts")
+    for c in contexts:
+        if c['name'] == "token":
+            return c.get("parameters").get("business_token")
+
+
 def processRequest(req):
     print("action:" + req.get("result").get("action"))
 
     base_url = "https://staging.kitomba.com"
 
-    # eva+sk1@kitomba.com
-    # 123456789
-    token = "32dc386752a583086b1c9d04424c01d3"  # todo pull from req
+    token = get_token(req)
+    business_token = get_token(req)
 
     res = {}  # handles non matching case
 
@@ -61,7 +72,7 @@ def processRequest(req):
         res = doYahooWeatherForecast(req)
     if req.get("result").get("action") == "appointments.first_visit":
         print(req)
-        res = appointments.first_visit(base_url, token)
+        res = appointments.first_visit(base_url, token, business_token)
     if req.get("result").get("action") == "sales.day":
         print(req)
         res = sales.today(base_url, token)
