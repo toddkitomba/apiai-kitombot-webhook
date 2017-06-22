@@ -46,10 +46,16 @@ def processRequest(req):
     return res
 
 def doK1Login(req):
+    baseurl = "https://staging.kitomba.com/"
+    url = baseurl + "k1/auth/login"
+    data = urllib.urlencode({'login': req.get(login),
+                             'password': req.get(password)})
+    response = urllib.urlopen(url=url, data=json.dumps(data)).read()
+
     return {
-        "speech": "you logged in",
-        "displayText": "you logged in",
-        "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": "23423432"}}]
+        "speech": "you are logged in",
+        "displayText": "you are logged in",
+        "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": response}}]
     }
 
 def doYahooWeatherForecast(req):
