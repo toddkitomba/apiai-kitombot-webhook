@@ -15,8 +15,9 @@ def test():
     result = response.json()
     print(result)
 
-    text = result['models'][0]['first_name']
-    text += result['models'][0]['start_date']
+    text = "First visit of today\n"
+    text += result['models'][0]['first_name'] + "\n"
+    text += result['models'][0]['start_date'] + "\n"
     text += result['models'][0]['appt_status']
 
     return {
