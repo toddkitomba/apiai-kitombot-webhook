@@ -53,9 +53,7 @@ def processRequest(req):
         res = login.login(req)
     if req.get("result").get("action") == "yahooWeatherForecast":
         res = doYahooWeatherForecast(req)
-    if req.get("result").get("action") == "test":
-        res = appointments.test()
-    if req.get("result").get("action") == "first_visit":
+    if req.get("result").get("action") == "appointments.first_visit":
         print(req)
         res = appointments.first_visit(base_url, token)
 
