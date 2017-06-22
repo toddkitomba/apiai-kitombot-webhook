@@ -62,7 +62,7 @@ def processRequest(req):
     base_url = "https://staging.kitomba.com"
 
     token = get_token(req)
-    business_token = get_token(req)
+    business_token = get_business_token(req)
 
     res = {}  # handles non matching case
 
