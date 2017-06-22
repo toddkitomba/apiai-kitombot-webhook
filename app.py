@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+
 from future.standard_library import install_aliases
+
 install_aliases()
 
-from urllib.parse import urlparse, urlencode
-from urllib.request import urlopen, Request
-from urllib.error import HTTPError
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
 import json
 import os
@@ -14,9 +15,16 @@ import os
 from flask import Flask
 from flask import request
 from flask import make_response
+from flask import jsonify
+
+
+
+from intents import reporting
+
 
 # Flask app should start in global layout
 app = Flask(__name__)
+
 
 
 @app.route('/webhook', methods=['POST'])
@@ -42,6 +50,8 @@ def processRequest(req):
         res = doK1Login(req)
     if req.get("result").get("action") == "yahooWeatherForecast":
         res = doYahooWeatherForecast(req)
+    if req.get("result").get("action") == "test":
+        res = reporting.test()
 
     return res
 
@@ -69,6 +79,8 @@ def doYahooWeatherForecast(req):
     res = makeWebhookResult(data)
     return res
 
+
+# noinspection SqlDialectInspection
 def makeYqlQuery(req):
     result = req.get("result")
     parameters = result.get("parameters")
