@@ -39,6 +39,10 @@ def webhook():
 def processRequest(req):
     print("here 1")
     print(req.get("result").get("action"))
+    if req.get("result").get("action") == "login":
+        return {
+            "token": "youluckyperson",
+        }
     if req.get("result").get("action") != "yahooWeatherForecast":
         return {}
     baseurl = "https://query.yahooapis.com/v1/public/yql?"
