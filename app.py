@@ -41,7 +41,9 @@ def processRequest(req):
     print(req.get("result").get("action"))
     if req.get("result").get("action") == "login":
         return {
-            "token": "youluckyperson",
+            "speech": "you logged in",
+            "displayText": "you logged in",
+            "data": "token",
         }
     if req.get("result").get("action") != "yahooWeatherForecast":
         return {}
