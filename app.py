@@ -53,6 +53,7 @@ def processRequest(req):
     if req.get("result").get("action") == "test":
         res = reporting.test()
     if req.get("result").get("action") == "test2":
+        print(req)
         res = reporting.test2()
 
     return res
