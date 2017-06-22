@@ -37,19 +37,26 @@ def webhook():
 
 
 def processRequest(req):
-    print("here 1")
-    print(req.get("result").get("action"))
+    print("action:" + req.get("result").get("action"))
     if req.get("result").get("action") == "login":
-        return {
-            "speech": "you logged in",
-            "displayText": "you logged in",
-            "contextOut": [{"name":"token", "lifespan":200, "parameters":{"token":"23423432"}}]
-        }
-    if req.get("result").get("action") != "yahooWeatherForecast":
-        return {}
+       data = doK1Login(req)
+    if req.get("result").get("action") == "yahooWeatherForecast":
+        data = doYahooWeatherForecast(req)
+
+    res = makeWebhookResult(data)
+
+    return res
+
+def doK1Login(req):
+    return {
+        "speech": "you logged in",
+        "displayText": "you logged in",
+        "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": "23423432"}}]
+    }
+
+def doYahooWeatherForecast(req):
     baseurl = "https://query.yahooapis.com/v1/public/yql?"
     yql_query = makeYqlQuery(req)
-    print("here 2")
     if yql_query is None:
         return {}
     yql_url = baseurl + urlencode({'q': yql_query}) + "&format=json"
@@ -57,7 +64,6 @@ def processRequest(req):
     data = json.loads(result)
     res = makeWebhookResult(data)
     return res
-
 
 def makeYqlQuery(req):
     result = req.get("result")
