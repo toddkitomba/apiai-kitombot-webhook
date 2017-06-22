@@ -47,14 +47,14 @@ def test():
     return {
         "speech": text,
         "displayText": text,
-        "facebook": {
+        "data": {"facebook": {
             "attachment": {
                 "type": "file",
                 "payload": {
                     "url": url + ".png"
                 }
             }
-        }
+        }}
 
     }
 
