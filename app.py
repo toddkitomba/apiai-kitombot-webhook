@@ -48,14 +48,22 @@ def processRequest(req):
 def doK1Login(req):
     baseurl = "https://staging.kitomba.com/"
     url = baseurl + "k1/auth/login"
-    data = urllib.urlencode({'login': req.get(login),
-                             'password': req.get(password)})
-    response = urllib.urlopen(url=url, data=json.dumps(data)).read()
+    result = req.get("result")
+    parameters = result.get("parameters")
+    email = parameters.get("email")
+    password = parameters.get("password")
+    data = urlencode({'login': email, 'password': password})
+    print("url " + url)
+    print("data " + data)
+    response = urlopen(url=url, data=data.encode('ascii')).read()
+    response_data = json.loads(response)
+    print("here")
+    print("response :" + str(response_data))
 
     return {
         "speech": "you are logged in",
         "displayText": "you are logged in",
-        "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": response}}]
+        "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": response_data.get('token')}}]
     }
 
 def doYahooWeatherForecast(req):
@@ -126,4 +134,4 @@ if __name__ == '__main__':
 
     print("Starting app on port %d" % port)
 
-    app.run(debug=False, port=port, host='0.0.0.0')
+    app.run(debug=True, port=port, host='0.0.0.0')
