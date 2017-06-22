@@ -15,8 +15,8 @@ def first_visit(base_url, token, business_token):
     result = response.json()
     print(result)
 
-    text = "First visit of today\n"
-    text += result['models'][0]['first_name'] + "\n"
+    text = "First visit of today with \n"
+    text += result['models'][0]['first_name'] + "\n at "
     text += result['models'][0]['start_date'] + "\n"
     text += result['models'][0]['appt_status']
 
