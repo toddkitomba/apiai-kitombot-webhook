@@ -49,7 +49,7 @@ def test():
         "displayText": text,
         "data": {"facebook": {
             "attachment": {
-                "type": "file",
+                "type": "image",
                 "payload": {
                     "url": url + ".png"
                 }
