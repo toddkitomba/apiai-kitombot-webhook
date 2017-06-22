@@ -26,5 +26,5 @@ def login(req):
         "displayText": "you are logged in",
         "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": response_data.get('token'),
                                                                          "business_token": response_data.get(
-                                                                             'other').get('token')}}]
+                                                                             'other').get('btoken')}}]
     }
