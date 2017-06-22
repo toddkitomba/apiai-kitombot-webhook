@@ -5,8 +5,9 @@ import requests
 install_aliases()  # not sure what this does...
 
 
+
 # k1 api example
-def first_visit(base_url, token):
+def today(base_url, token):
     url = base_url + "/k1/clients_ajax/get_client_appointments_info_for_day/Today/93895ccd5153edb2f7b09193b9225f89/all"
     headers = {'Token': token}
     response = requests.post(url, None, True, verify=False, headers=headers)

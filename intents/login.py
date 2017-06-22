@@ -1,7 +1,5 @@
 from __future__ import print_function
 
-from urllib.parse import urlencode
-
 from future.standard_library import install_aliases
 import requests
 
@@ -26,5 +24,7 @@ def login(req):
     return {
         "speech": "you are logged in",
         "displayText": "you are logged in",
-        "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": response_data.get('token')}}]
+        "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": response_data.get('token'),
+                                                                         "business_token": response_data.get(
+                                                                             'other').get('token')}}]
     }

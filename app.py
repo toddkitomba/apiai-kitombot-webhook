@@ -6,7 +6,9 @@ from future.standard_library import install_aliases
 
 install_aliases()
 
+# noinspection PyCompatibility
 from urllib.parse import urlencode
+# noinspection PyCompatibility
 from urllib.request import urlopen
 
 import json
@@ -15,10 +17,11 @@ import os
 from flask import Flask
 from flask import request
 from flask import make_response
-from flask import jsonify
+
 
 from intents import appointments
 from intents import login
+from intents import sales
 
 # Flask app should start in global layout
 app = Flask(__name__)
@@ -45,9 +48,12 @@ def processRequest(req):
     print("action:" + req.get("result").get("action"))
 
     base_url = "https://staging.kitomba.com"
-    token = "8623a3ff07832d2fe4d7079aa811745d"  # todo pull from req
 
-    res = {} # handles non matching case
+    # eva+sk1@kitomba.com
+    # 123456789
+    token = "32dc386752a583086b1c9d04424c01d3"  # todo pull from req
+
+    res = {}  # handles non matching case
 
     if req.get("result").get("action") == "login":
         res = login.login(req)
@@ -56,6 +62,9 @@ def processRequest(req):
     if req.get("result").get("action") == "appointments.first_visit":
         print(req)
         res = appointments.first_visit(base_url, token)
+    if req.get("result").get("action") == "sales.day":
+        print(req)
+        res = sales.today(base_url, token)
 
     return res
 
