@@ -17,14 +17,10 @@ from flask import request
 from flask import make_response
 from flask import jsonify
 
-
-
-from intents import reporting
-
+from intents import appointments
 
 # Flask app should start in global layout
 app = Flask(__name__)
-
 
 
 @app.route('/webhook', methods=['POST'])
@@ -46,17 +42,24 @@ def webhook():
 
 def processRequest(req):
     print("action:" + req.get("result").get("action"))
+
+    base_url = "https://staging.kitomba.com"
+    token = "8623a3ff07832d2fe4d7079aa811745d"  # todo pull from req
+
+    res = {} # handles non matching case
+
     if req.get("result").get("action") == "login":
         res = doK1Login(req)
     if req.get("result").get("action") == "yahooWeatherForecast":
         res = doYahooWeatherForecast(req)
     if req.get("result").get("action") == "test":
-        res = reporting.test()
-    if req.get("result").get("action") == "test2":
+        res = appointments.test()
+    if req.get("result").get("action") == "first_visit":
         print(req)
-        res = reporting.test2()
+        res = appointments.first_visit(base_url, token)
 
     return res
+
 
 def doK1Login(req):
     baseurl = "https://staging.kitomba.com/"
@@ -78,6 +81,7 @@ def doK1Login(req):
         "displayText": "you are logged in",
         "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": response_data.get('token')}}]
     }
+
 
 def doYahooWeatherForecast(req):
     baseurl = "https://query.yahooapis.com/v1/public/yql?"
