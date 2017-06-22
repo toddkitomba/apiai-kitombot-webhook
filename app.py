@@ -43,7 +43,7 @@ def processRequest(req):
         return {
             "speech": "you logged in",
             "displayText": "you logged in",
-            "data": "token",
+            "contextOut": [{"name":"token", "lifespan":200, "parameters":{"token":"23423432"}}]
         }
     if req.get("result").get("action") != "yahooWeatherForecast":
         return {}
