@@ -41,19 +41,20 @@ def test():
     )
     data = Data([trace0, trace1])
 
-    url = py.plot(data, filename='basic-line')
+    url = py.plot(data, auto_open=False, filename='basic-line')
 
     text = "hi"
     return {
         "speech": text,
         "displayText": text,
-        "attachments": [
-            {
-                "contentType": "image/png",
-                "contentUrl": url + ".png",
-                "name": url + ".png"
+        "facebook": {
+            "attachment": {
+                "type": "file",
+                "payload": {
+                    "url": url + ".png"
+                }
             }
-        ]
+        }
 
     }
 

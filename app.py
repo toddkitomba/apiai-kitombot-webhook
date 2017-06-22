@@ -52,6 +52,8 @@ def processRequest(req):
         res = doYahooWeatherForecast(req)
     if req.get("result").get("action") == "test":
         res = reporting.test()
+    if req.get("result").get("action") == "test2":
+        res = reporting.test2()
 
     return res
 
@@ -138,4 +140,4 @@ if __name__ == '__main__':
 
     print("Starting app on port %d" % port)
 
-    app.run(debug=False, port=port, host='0.0.0.0')
+    app.run(debug=True, port=port, host='0.0.0.0')
