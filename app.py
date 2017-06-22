@@ -39,11 +39,9 @@ def webhook():
 def processRequest(req):
     print("action:" + req.get("result").get("action"))
     if req.get("result").get("action") == "login":
-       data = doK1Login(req)
+        res = doK1Login(req)
     if req.get("result").get("action") == "yahooWeatherForecast":
-        data = doYahooWeatherForecast(req)
-
-    res = makeWebhookResult(data)
+        res = doYahooWeatherForecast(req)
 
     return res
 
