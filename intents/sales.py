@@ -45,7 +45,7 @@ def today(base_url, token, business_token, date=None):
             "attachment": {
                 "type": "image",
                 "payload": {
-                    "url": gif_response.json().get('data').get('url')
+                    "url": gif_response.json().get('data').get('image_url')
                 }
             }
         }}
