@@ -96,7 +96,8 @@ def processRequest(req):
     if req.get("result").get("action") == "sales.day":
         print(req)
         date = req.get("result").get("parameters").get("date")
-        res = sales.today(base_url, token, business_token)
+        print(date)
+        res = sales.today(base_url, token, business_token, date)
 
     return res
 
