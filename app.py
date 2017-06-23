@@ -18,12 +18,21 @@ from flask import Flask
 from flask import request
 from flask import make_response
 
-
 from intents import appointments
 from intents import login
+from intents import sales
+from intents import weather
 
 # Flask app should start in global layout
 app = Flask(__name__)
+
+
+class AuthError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
 
 
 @app.route('/webhook', methods=['POST'])
@@ -44,16 +53,24 @@ def webhook():
 
 
 def get_token(req):
-    contexts = req.get("result").get("contexts")
-    for c in contexts:
-        if c['name'] == "token":
-            return c.get("parameters").get("token")
+    try:
+        contexts = req.get("result").get("contexts")
+        for c in contexts:
+            if c['name'] == "token":
+                return c.get("parameters").get("token")
+    except (RuntimeError, TypeError, NameError):
+        raise AuthError("No session token")
 
 def get_business_token(req):
-    contexts = req.get("result").get("contexts")
-    for c in contexts:
-        if c['name'] == "token":
-            return c.get("parameters").get("business_token")
+    try:
+        contexts = req.get("result").get("contexts")
+        for c in contexts:
+            if c['name'] == "token":
+                return c.get("parameters").get("business_token")
+    except (RuntimeError, TypeError, NameError):
+        raise AuthError("No session token")
+
+
 
 
 def processRequest(req):
@@ -64,12 +81,15 @@ def processRequest(req):
     token = get_token(req)
     business_token = get_business_token(req)
 
+    print(token)
+    print(business_token)
+
     res = {}  # handles non matching case
 
     if req.get("result").get("action") == "login":
         res = login.login(req)
     if req.get("result").get("action") == "yahooWeatherForecast":
-        res = doYahooWeatherForecast(req)
+        res = weather.doYahooWeatherForecast(req)
     if req.get("result").get("action") == "appointments.first_visit":
         print(req)
         res = appointments.first_visit(base_url, token, business_token)
@@ -78,74 +98,10 @@ def processRequest(req):
         res = appointments.today(base_url, token, business_token)
     if req.get("result").get("action") == "sales.day":
         print(req)
-        res = sales.today(base_url, token)
+        date = req.get("result").get("parameters").get("date")
+        res = sales.today(base_url, token, business_token)
 
     return res
-
-
-def doYahooWeatherForecast(req):
-    baseurl = "https://query.yahooapis.com/v1/public/yql?"
-    yql_query = makeYqlQuery(req)
-    if yql_query is None:
-        return {}
-    yql_url = baseurl + urlencode({'q': yql_query}) + "&format=json"
-    result = urlopen(yql_url).read()
-    data = json.loads(result)
-    res = makeWebhookResult(data)
-    return res
-
-
-# noinspection SqlDialectInspection
-def makeYqlQuery(req):
-    result = req.get("result")
-    parameters = result.get("parameters")
-    city = parameters.get("geo-city")
-    if city is None:
-        return None
-
-    return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
-
-
-def makeWebhookResult(data):
-    print("data")
-    print(json.dumps(data, indent=4))
-    query = data.get('query')
-    if query is None:
-        return {}
-
-    result = query.get('results')
-    if result is None:
-        return {}
-
-    channel = result.get('channel')
-    if channel is None:
-        return {}
-
-    item = channel.get('item')
-    location = channel.get('location')
-    units = channel.get('units')
-    if (location is None) or (item is None) or (units is None):
-        return {}
-
-    condition = item.get('condition')
-    if condition is None:
-        return {}
-
-    print(json.dumps(item, indent=4))
-
-    speech = "Today in " + location.get('city') + ": " + condition.get('text') + \
-             ", the temperature is " + condition.get('temp') + " " + units.get('temperature')
-
-    print("Response:")
-    print(speech)
-
-    return {
-        "speech": speech,
-        "displayText": speech,
-        # "data": data,
-        # "contextOut": [],
-        "source": "apiai-weather-webhook-sample"
-    }
 
 
 if __name__ == '__main__':
@@ -153,4 +109,4 @@ if __name__ == '__main__':
 
     print("Starting app on port %d" % port)
 
-    app.run(debug=False, port=port, host='0.0.0.0')
+    app.run(debug=True, port=port, host='0.0.0.0')
