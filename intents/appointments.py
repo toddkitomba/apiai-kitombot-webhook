@@ -15,10 +15,11 @@ def first_visit(base_url, token, business_token, day='Today'):
     result = response.json()
     print(result)
 
-    text = "First visit of " + day + ": \n"
-    text += result['models'][0]['first_name'] + "\n at "
-    text += result['models'][0]['start_date'] + "\n"
-    text += result['models'][0]['appt_status']
+    text = "Your first appointment " + day + ": \n"
+    text += result['models'][0]['first_name'] + " with "
+    text += result['models'][0]['services'][0]['staff_first_name'] + " at "
+    text += result['models'][0]['start_date'] + " "
+    text += result['models'][0]['appt_status'] + "\n"
 
     return {
         "speech": text,
