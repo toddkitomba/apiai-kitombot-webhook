@@ -92,7 +92,9 @@ def processRequest(req):
         res = weather.doYahooWeatherForecast(req)
     if req.get("result").get("action") == "appointments.first_visit":
         print(req)
-        res = appointments.first_visit(base_url, token, business_token)
+        day = req.get("result").get("parameters").get("day")
+        print(day)
+        res = appointments.first_visit(base_url, token, business_token, day)
     if req.get("result").get("action") == "appointments.today":
         print(req)
         day = req.get("result").get("parameters").get("day")
