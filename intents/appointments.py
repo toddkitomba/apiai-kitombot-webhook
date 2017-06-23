@@ -25,16 +25,16 @@ def first_visit(base_url, token, business_token):
         "displayText": text,
     }
 
-def today(base_url, token, business_token):
+def today(base_url, token, business_token, day='Today'):
     print(business_token)
-    url = base_url + "/k1/clients_ajax/get_client_appointments_info_for_day/Today/" + business_token + "/all"
+    url = base_url + "/k1/clients_ajax/get_client_appointments_info_for_day/" + day + "/" + business_token + "/all"
     print(url)
     headers = {'Token': token}
     response = requests.post(url, None, True, verify=False, headers=headers)
     result = response.json()
     print(result)
 
-    text = "Your appointments for today: \n"
+    text = "Your appointments for " + day + ": \n"
     for m in result['models']:
         text += "-" + m['first_name'] + " with "
         text += m['services'][0]['staff_first_name'] + " at "
