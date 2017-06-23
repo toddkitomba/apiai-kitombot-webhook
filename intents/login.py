@@ -24,7 +24,7 @@ def login(req):
     return {
         "speech": "you are logged in",
         "displayText": "you are logged in",
-        "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": response_data.get('token'),
+        "contextOut": [{"name": "token", "lifespan": 200, "parameters": {"token": response_data.get('token'),"email":email,
                                                                          "business_token": response_data.get(
                                                                              'other').get('btoken')}}]
     }
