@@ -95,7 +95,9 @@ def processRequest(req):
         res = appointments.first_visit(base_url, token, business_token)
     if req.get("result").get("action") == "appointments.today":
         print(req)
-        res = appointments.today(base_url, token, business_token)
+        day = req.get("result").get("parameters").get("day")
+        print(day)
+        res = appointments.today(base_url, token, business_token, day)
     if req.get("result").get("action") == "sales.day":
         print(req)
         date = req.get("result").get("parameters").get("date")
