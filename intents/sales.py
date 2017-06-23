@@ -57,12 +57,5 @@ def today(base_url, token, business_token, date=None):
                 "speech": text
             }
         ],
-        "data": {"facebook": {
-            "attachment": {
-                "type": "image",
-                "payload": {
-                    "url": gif_response.json().get('data').get('image_url')
-                }
-            }
-        }}
+
     }
