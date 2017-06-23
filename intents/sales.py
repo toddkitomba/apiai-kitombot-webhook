@@ -17,7 +17,9 @@ def today(base_url, token, business_token, date=None):
 
 
     gif_url = "https://api.giphy.com/v1/gifs/random?api_key=7d45d6135fb64502a484194e6f7187d2&tag=money&rating=PG-13"
-    response = requests.get(gif_url, None, True, verify=False)
+    response = requests.get(gif_url)
+
+    print(response.json())
 
 
     url = base_url + "/k1/dashboard_ajax/getDashboardData?bid=" + business_token + "&byStaff=false&date=" + date + "+10%3A37%3A49&GST=exclusive&stage=db_stage_1"
