@@ -36,9 +36,9 @@ def today(base_url, token, business_token):
 
     text = "Today's appointments \n"
     for m in result['models']:
-        text += m['first_name'] + "\n at "
-        text += m['start_date'] + "\n"
-        text += m['appt_status'] + "\n\n"
+        text += "-" + m['first_name'] + "at "
+        text += m['start_date'] + " "
+        text += m['appt_status'] + "\n"
     return {
         "speech": text,
         "displayText": text,
