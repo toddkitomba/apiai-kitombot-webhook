@@ -34,11 +34,12 @@ def today(base_url, token, business_token):
     result = response.json()
     print(result)
 
-    text = "Today's appointments \n"
+    text = "Your appointments for today: \n"
     for m in result['models']:
-        text += m['first_name'] + "\n at "
-        text += m['start_date'] + "\n"
-        text += m['appt_status'] + "\n\n"
+        text += "-" + m['first_name'] + " with "
+        text += m['services'][0]['staff_first_name'] + " at "
+        text += m['start_date'] + " "
+        text += m['appt_status'] + "\n"
     return {
         "speech": text,
         "displayText": text,

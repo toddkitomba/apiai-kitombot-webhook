@@ -1,8 +1,5 @@
 from __future__ import print_function
 
-from io import BytesIO
-from PIL import Image, ImageDraw, ImageFont, ImageSequence
-
 from future.standard_library import install_aliases
 import datetime
 import requests
