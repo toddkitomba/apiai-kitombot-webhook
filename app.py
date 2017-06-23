@@ -22,6 +22,7 @@ from intents import appointments
 from intents import login
 from intents import sales
 from intents import weather
+from intents import targets
 
 # Flask app should start in global layout
 app = Flask(__name__)
@@ -105,6 +106,9 @@ def processRequest(req):
         date = req.get("result").get("parameters").get("date")
         print(date)
         res = sales.today(base_url, token, business_token, date)
+    if req.get("result").get("action") == "targets":
+        print(req)
+        res = targets.today(base_url, token, business_token)
 
     return res
 
