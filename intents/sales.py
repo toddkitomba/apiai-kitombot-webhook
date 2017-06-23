@@ -41,6 +41,22 @@ def today(base_url, token, business_token, date=None):
     return {
         "speech": text,
         "displayText": text,
+        "messages": [
+            {
+                "type": 0,
+                "platform": "facebook",
+                "speech": text
+            },
+            {
+                "type": 3,
+                "platform": "facebook",
+                "imageUrl": gif_response.json().get('data').get('image_url')
+            },
+            {
+                "type": 0,
+                "speech": text
+            }
+        ],
         "data": {"facebook": {
             "attachment": {
                 "type": "image",
