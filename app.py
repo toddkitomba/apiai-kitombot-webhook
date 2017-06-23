@@ -54,17 +54,23 @@ def webhook():
 
 def get_token(req):
     try:
-        return req.get("result").get("parameters").get("token")
-
+        contexts = req.get("result").get("contexts")
+        for c in contexts:
+            if c['name'] == "token":
+                return c.get("parameters").get("token")
     except (RuntimeError, TypeError, NameError):
         raise AuthError("No session token")
 
 def get_business_token(req):
     try:
-        return req.get("result").get("parameters").get("business_token")
-
+        contexts = req.get("result").get("contexts")
+        for c in contexts:
+            if c['name'] == "token":
+                return c.get("parameters").get("business_token")
     except (RuntimeError, TypeError, NameError):
-        raise AuthError("No business token")
+        raise AuthError("No session token")
+
+
 
 
 def processRequest(req):
