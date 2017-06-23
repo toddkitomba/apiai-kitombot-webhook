@@ -24,3 +24,22 @@ def first_visit(base_url, token, business_token):
         "speech": text,
         "displayText": text,
     }
+
+def today(base_url, token, business_token):
+    print(business_token)
+    url = base_url + "/k1/clients_ajax/get_client_appointments_info_for_day/Today/" + business_token + "/all"
+    print(url)
+    headers = {'Token': token}
+    response = requests.post(url, None, True, verify=False, headers=headers)
+    result = response.json()
+    print(result)
+
+    text = "Today's appointments \n"
+    for m in result['models']:
+        text += m['first_name'] + "\n at "
+        text += m['start_date'] + "\n"
+        text += m['appt_status'] + "\n\n"
+    return {
+        "speech": text,
+        "displayText": text,
+    }
